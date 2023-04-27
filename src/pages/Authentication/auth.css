@@ -1,0 +1,11 @@
+.cards {
+    width: 100%;
+    display: grid;
+    gap: 2rem;
+    background-color: 'white';
+    height : 100vh;
+  }
+
+@media (min-width: 900px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+}
