@@ -10,10 +10,12 @@ import './index.css';
 import axios from '../../utils/axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
+import { useAxios } from 'components/useAxios';
 
 export default function WarehouseAdd({ setOpen, rowId }) {
     const navigate = useNavigate();
     const [formValue, setFormValue] = useState({ name: '', email: '', phoneNumber: '', country: '', city: '', zipCode: '' });
+    const axios = useAxios();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,14 +23,13 @@ export default function WarehouseAdd({ setOpen, rowId }) {
     };
 
     const handleSubmit = async (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         formValue['id'] = rowId ? rowId : null;
         // console.log(formValue);
         axios
             .post('warehouse/save', formValue)
             .then(async (res) => {
-                toast.success('Request successful', { autoClose: false, closeOnClick: true });
-                await new Promise((resolve) => setTimeout(resolve, 3000));
+                toast.success('Request successful');
                 console.log(res);
                 setOpen(false);
             })
@@ -55,7 +56,7 @@ export default function WarehouseAdd({ setOpen, rowId }) {
     useEffect(() => {
         // console.log(rowId);
         // alert(JSON.stringify(rowId));
-        toast.success('Request successful');
+        // toast.success('Request successful');
         if (rowId) {
             getValueById(rowId);
         }
@@ -75,7 +76,7 @@ export default function WarehouseAdd({ setOpen, rowId }) {
 
                 <Box sx={{ color: '#ffffff', width: '100%', padding: '20px 0px 0px 0px' }}>
                     <div className="card">
-                        <form onSubmit={handleSubmit}>
+                        <form>
                             <div className="row col-md-12" style={{ padding: '2%' }}>
                                 <div className="col-md-6" style={{ minHeight: '50px', padding: '10px' }}>
                                     <p className="label-color">
@@ -169,7 +170,7 @@ export default function WarehouseAdd({ setOpen, rowId }) {
                                 </div>
                             </div>
                             <div style={{ padding: '1% 2% 2% 1%' }} className="align-right">
-                                <Button type="submit" className="btn1" variant="contained" color="primary">
+                                <Button type="submit" className="btn1" onClick={handleSubmit} variant="contained" color="primary">
                                     Save
                                 </Button>
                                 <Button onClick={() => setOpen(false)} variant="outlined" color="primary">
@@ -185,7 +186,6 @@ export default function WarehouseAdd({ setOpen, rowId }) {
                     </div>
                 </Box>
             </div>
-            <ToastContainer position="top-right" theme="light" />
         </>
     );
 }

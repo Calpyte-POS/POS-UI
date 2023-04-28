@@ -5,9 +5,11 @@ import '../../WarehouseModule/index.css';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import Stack from '@mui/material/Stack';
+import { useAxios } from '../../../components/useAxios';
 
 export default function ListRoles() {
     const navigate = useNavigate();
+    const axios = useAxios();
     return (
         <>
             <div style={{ padding: '20px' }}>

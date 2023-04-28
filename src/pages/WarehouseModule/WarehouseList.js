@@ -11,6 +11,7 @@ import { Box } from '../../../node_modules/@mui/material/index';
 import WarehouseAdd from './WarehouseAdd';
 import WarehouseDelete from './WarehouseDelete';
 import { animations } from 'react-animation';
+import { useAxios } from 'components/useAxios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -37,6 +38,7 @@ export default function WarehouseList({ categoryTrigger }) {
     const [displayValue, setDisplayValue] = useState([]);
     // const [search, setSearch] = useState('');
     const columns = ['userId', 'title'];
+    const axios = useAxios();
 
     const [categories, setCategories] = useState([]);
     const [count, setCount] = useState(0);
@@ -69,9 +71,10 @@ export default function WarehouseList({ categoryTrigger }) {
             pageSize: postPerPage
         };
         await axios
-            .post('warehouse/', data)
+            .post('warehouse', data)
             .then((res) => {
                 console.log(data);
+                setCount(res?.data?.recordsTotal);
                 setCategories(res?.data?.data);
             })
             .catch((err) => console.error(err));
