@@ -10,13 +10,15 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import { FormControlLabel } from '@mui/material/index';
 import { Checkbox } from '@mui/material/index';
-import axios from '../../../utils/axios';
+import { useAxios } from '../../../components/useAxios';
+// import axios from '../../../utils/axios';
 
 export default function AddRoles() {
     const navigate = useNavigate();
     const [selected, setSelelcted] = useState([]);
     const [formValue, setFormValue] = useState({ name: '' });
     const [checkedValues, setCheckedValues] = useState([]);
+    const axios = useAxios();
 
     // const handleChange = (e) => {
     //     const { name, value } = e.target;
@@ -141,6 +143,14 @@ export default function AddRoles() {
         console.log(formValue);
         console.log(checkedValues);
         alert('hit');
+        axios
+            .post('roles/save', formValue, checkedValues)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         navigate('roles/roles-list');
     }
     const handleProductChange = (event) => {

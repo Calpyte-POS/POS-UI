@@ -11,14 +11,20 @@ import 'jquery/dist/jquery.min.js';
 import 'popper.js/dist/umd/popper.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
+import { AxiosProvider } from './components/useAxios';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode>
+
     <ReduxProvider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <AxiosProvider>
+            <BrowserRouter>
+                <App />
+                <ToastContainer position="top-right" theme="light" />
+            </BrowserRouter>
+        </AxiosProvider>
     </ReduxProvider>
     /* </React.StrictMode> */
 );
