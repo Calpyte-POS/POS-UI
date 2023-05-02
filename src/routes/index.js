@@ -15,6 +15,7 @@ const Login = Loadable(lazy(() => import('../pages/Authentication/login'))); // 
 const ClientRegister = Loadable(lazy(() => import('../pages/Authentication/register')));
 const WarehouseModule = Loadable(lazy(() => import('../pages/WarehouseModule')));
 const Roles = Loadable(lazy(() => import('../pages/Roles/Permissions')));
+const UserModule = Loadable(lazy(() => import('../pages/UserModule')));
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -60,6 +61,10 @@ export default function ThemeRoutes() {
                 {
                     path: 'roles/*',
                     element: <Roles />
+                },
+                {
+                    path: 'user/*',
+                    element: <UserModule />
                 }
             ]
         },

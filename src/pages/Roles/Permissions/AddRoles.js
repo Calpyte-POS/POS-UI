@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { animations } from 'react-animation';
@@ -13,7 +13,7 @@ import { Checkbox } from '@mui/material/index';
 import { useAxios } from '../../../components/useAxios';
 // import axios from '../../../utils/axios';
 
-export default function AddRoles() {
+export default function AddRoles({ setOpen, rowId }) {
     const navigate = useNavigate();
     const [selected, setSelelcted] = useState([]);
     const [formValue, setFormValue] = useState({ name: '' });
@@ -144,7 +144,7 @@ export default function AddRoles() {
         console.log(checkedValues);
         alert('hit');
         axios
-            .post('roles/save', formValue, checkedValues)
+            .post('role/', formValue, checkedValues)
             .then((res) => {
                 console.log(res.data);
             })
@@ -153,6 +153,28 @@ export default function AddRoles() {
             });
         navigate('roles/roles-list');
     }
+
+    function getValueById(id) {
+        axios
+            .get('role/by-id?id=' + id)
+            .then((res) => {
+                console.log(res);
+                setFormValue({
+                    name: res?.data?.name
+                });
+            })
+            .catch((err) => console.log(err));
+    }
+
+    useEffect(() => {
+        // console.log(rowId);
+        // alert(JSON.stringify(rowId));
+        // toast.success('Request successful');
+        if (rowId) {
+            getValueById(rowId);
+        }
+    }, []);
+
     const handleProductChange = (event) => {
         const id = event.target.id;
         const isChecked = event.target.checked;
