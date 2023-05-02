@@ -34,5 +34,11 @@ export const menuList = [
         to: '/roles',
         type: 'group',
         items: []
+    },
+    {
+        title: 'User',
+        to: '/user',
+        type: 'group',
+        items: []
     }
 ];
