@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // initial state
 const initialState = {
-    name: 'Dinesh',
+    name: 'KKK',
     token: 'sample Token',
     isLoggedIn: false,
-    email: 'dineshk@calpyte.com'
+    email: 'kishore@calpyte.com'
 };
 
 // ==============================|| SLICE - MENU ||============================== //

@@ -13,33 +13,12 @@ import WarehouseDelete from './WarehouseDelete';
 import { animations } from 'react-animation';
 import { useAxios } from 'components/useAxios';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14
-    }
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-        border: 0
-    }
-}));
-
 export default function WarehouseList({ categoryTrigger }) {
     const navigate = useNavigate();
     const [displayValue, setDisplayValue] = useState([]);
     // const [search, setSearch] = useState('');
     const columns = ['userId', 'title'];
     const axios = useAxios();
-
     const [categories, setCategories] = useState([]);
     const [count, setCount] = useState(0);
     const [rowId, setRowId] = useState({});
@@ -55,6 +34,7 @@ export default function WarehouseList({ categoryTrigger }) {
         { name: 'zipCode', canShow: true }
     ];
     const [open, setOpen] = useState(false);
+    const [isDelete, setIsDelete] = React.useState(false);
     var postPerPage = 10;
     var pageNumber = 1;
     var filter = [];
@@ -91,7 +71,9 @@ export default function WarehouseList({ categoryTrigger }) {
                 setOpen(true);
                 break;
             case 'delete':
-                alert('Are you sure to delete');
+                setRowId(action.value);
+                // alert('Are you sure to delete');
+                setIsDelete(true);
                 break;
             default:
                 setRowId(null);
@@ -129,7 +111,7 @@ export default function WarehouseList({ categoryTrigger }) {
                                 <div className="align-right">
                                     {/* <input type="text" id="search" placeholder="Search" /> */}
                                     <Button onClick={() => rowAction({ name: 'add', value: null })} variant="contained" color="primary">
-                                        Create Warehouse
+                                        Create Store
                                     </Button>
                                 </div>
                                 <br />
@@ -155,6 +137,7 @@ export default function WarehouseList({ categoryTrigger }) {
                     }[open]
                 }
             </Box>
+            {isDelete && <WarehouseDelete open={isDelete} setOpen={setIsDelete} id={rowId} />}
 
             {/* <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">

@@ -8,7 +8,7 @@ import { Navigate } from 'react-router-dom';
 const WarehouseList = Loadable(lazy(() => import('./WarehouseList')));
 const WarehouseAdd = Loadable(lazy(() => import('./WarehouseAdd')));
 
-export default function CombustionModule() {
+export default function WarehouseModule() {
     return useRoutes([
         { path: '/', element: <Navigate to="list" replace={true} /> },
         { path: '*', element: <Navigate to="list" replace={true} /> },

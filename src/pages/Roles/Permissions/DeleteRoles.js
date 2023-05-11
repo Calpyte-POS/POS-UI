@@ -6,14 +6,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useEffect } from 'react';
-import { useAxios } from '../../components/useAxios';
+import { useAxios } from '../../../components/useAxios';
 
-export default function WarehouseDelete({ open, setOpen, id }) {
+export default function DeleteRoles({ open, setOpen, id }) {
     const axios = useAxios();
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     const handleClose = () => {
         setOpen(false);
@@ -25,7 +21,7 @@ export default function WarehouseDelete({ open, setOpen, id }) {
 
     async function handleDelete() {
         await axios
-            .get('warehouse/delete?id=' + id)
+            .get('role/delete?id=' + id)
             .then((res) => {
                 console.log(res);
             })
@@ -38,7 +34,7 @@ export default function WarehouseDelete({ open, setOpen, id }) {
             <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
                 {/* <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle> */}
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">Are you sure want to delete this 'Warehouse' ?</DialogContentText>
+                    <DialogContentText id="alert-dialog-description">Are you sure want to delete this 'Role' ?</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleDelete} variant="outlined" color="primary">

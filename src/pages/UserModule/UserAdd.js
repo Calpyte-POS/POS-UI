@@ -9,10 +9,13 @@ import Stack from '@mui/material/Stack';
 import { toast, ToastContainer } from 'react-toastify';
 import { useAxios } from '../../components/useAxios';
 import '../WarehouseModule/index.css';
+import Autocomplete from '@mui/material/Autocomplete';
 
 export default function UaerAdd({ setOpen, rowId }) {
     const navigate = useNavigate();
     const axios = useAxios();
+    const [isSending, setIsSending] = useState(false);
+    const [roles, setRoles] = useState([]);
 
     const [formValue, setFormValue] = useState({
         firstName: '',
@@ -29,41 +32,51 @@ export default function UaerAdd({ setOpen, rowId }) {
         setFormValue({ ...formValue, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = (e) => {
+        // formValue['role'] = formValue.role?.id;
         formValue['id'] = rowId ? rowId : null;
-        console.log(formValue);
+        e.preventDefault();
         axios
             .post('user/save', formValue)
-            .then(async (res) => {
+            .then((res) => {
                 toast.success('Request Successful');
-                console.log(res);
                 setOpen(false);
             })
             .catch((err) => toast.error(err));
     };
 
-    function getValueById(id) {
+    // function getValueById(id) {
+    //     axios
+    //         .get('user/by-id?id=' + id)
+    //         .then((res) => {
+    //             console.log(res);
+    //             setFormValue({
+    //                 firstName: res?.data?.firstName,
+    //                 lastName: res?.data?.lastName,
+    //                 email: res?.data?.email,
+    //                 phoneNumber: res?.data?.phoneNumber,
+    //                 password: res?.data?.password,
+    //                 confirmPassword: res?.data?.confirmPassword,
+    //                 role: res?.data?.role
+    //             });
+    //         })
+    //         .catch((err) => console.log(err));
+    // }
+
+    function getRoles() {
         axios
-            .get('warehouse/by-id?id=' + id)
+            .get('role/get-all')
             .then((res) => {
-                console.log(res);
-                setFormValue({
-                    firstName: res?.data?.firstName,
-                    lastName: res?.data?.lastName,
-                    email: res?.data?.email,
-                    phoneNumber: res?.data?.phoneNumber,
-                    password: res?.data?.password,
-                    confirmPassword: res?.data?.confirmPassword,
-                    role: res?.data?.role
-                });
+                setRoles(res?.data);
             })
             .catch((err) => console.log(err));
     }
+
     useEffect(() => {
-        if (rowId) {
-            getValueById(rowId);
-        }
+        getRoles();
+        // if (rowId) {
+        //     getValueById(rowId);
+        // }
     }, []);
 
     return (
@@ -88,7 +101,7 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     </p>
                                     <FormControl fullWidth>
                                         <TextField
-                                            label="Enter First Name"
+                                            placeholder="Enter First Name"
                                             varient="outlined"
                                             size="small"
                                             name="firstName"
@@ -103,7 +116,7 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     </p>
                                     <FormControl fullWidth>
                                         <TextField
-                                            label="Enter Last Name"
+                                            placeholder="Enter Last Name"
                                             varient="outlined"
                                             size="small"
                                             name="lastName"
@@ -118,7 +131,7 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     </p>
                                     <FormControl fullWidth>
                                         <TextField
-                                            label="Enter Email"
+                                            placeholder="Enter Email"
                                             varient="outlined"
                                             size="small"
                                             name="email"
@@ -133,7 +146,7 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     </p>
                                     <FormControl fullWidth>
                                         <TextField
-                                            label="Enter Phone Number"
+                                            placeholder="Enter Phone Number"
                                             varient="outlined"
                                             size="small"
                                             name="phoneNumber"
@@ -148,7 +161,7 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     </p>
                                     <FormControl fullWidth>
                                         <TextField
-                                            label="Enter Password"
+                                            placeholder="Enter Password"
                                             varient="outlined"
                                             size="small"
                                             name="password"
@@ -163,7 +176,7 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     </p>
                                     <FormControl fullWidth>
                                         <TextField
-                                            label="Enter Confirm Password"
+                                            placeholder="Enter Confirm Password"
                                             varient="outlined"
                                             size="small"
                                             name="confirmPassword"
@@ -176,16 +189,18 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     <p className="label-color">
                                         Role:<span className="important">*</span>
                                     </p>
-                                    <FormControl fullWidth>
-                                        <TextField
-                                            label="Choose Role"
-                                            varient="outlined"
-                                            size="small"
-                                            name="role"
-                                            value={formValue.role}
-                                            onChange={handleChange}
-                                        />
-                                    </FormControl>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        value={formValue.role ? formValue.role : roles[0]}
+                                        onChange={(event, newValue) => {
+                                            setFormValue({ ...formValue, ['role']: newValue });
+                                        }}
+                                        options={roles}
+                                        getOptionLabel={(role) => `${role.name}`}
+                                        size="small"
+                                        renderInput={(params) => <TextField placeholder="Choose Role" {...params} />}
+                                    />
                                 </div>
                             </div>
                             <div style={{ padding: '1% 2% 2% 1%' }} className="align-right">
@@ -196,6 +211,7 @@ export default function UaerAdd({ setOpen, rowId }) {
                                     Cancel
                                 </Button>
                             </div>
+                            {isSending && navigate('user/list')}
                             <h2>{console.log(JSON.stringify(formValue))}</h2>
                         </form>
                     </div>
