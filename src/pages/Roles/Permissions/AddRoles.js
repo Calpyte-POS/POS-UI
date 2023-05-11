@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import { FormControlLabel } from '@mui/material/index';
 import { Checkbox } from '@mui/material/index';
 import { useAxios } from '../../../components/useAxios';
-// import axios from '../../../utils/axios';
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function AddRoles({ setOpen, rowId }) {
     const navigate = useNavigate();
@@ -138,21 +138,21 @@ export default function AddRoles({ setOpen, rowId }) {
 
     console.log(selected);
 
-    function submit(e) {
+    const submit = async (e) => {
         e.preventDefault();
+        formValue['id'] = rowId ? rowId : null;
         console.log(formValue);
         console.log(checkedValues);
         alert('hit');
         axios
             .post('role/', formValue, checkedValues)
-            .then((res) => {
+            .then(async (res) => {
+                toast.success('Request Successful');
                 console.log(res.data);
+                setOpen(false);
             })
-            .catch((err) => {
-                console.log(err);
-            });
-        navigate('roles/roles-list');
-    }
+            .catch((err) => toast.error(err));
+    };
 
     function getValueById(id) {
         axios
@@ -198,50 +198,51 @@ export default function AddRoles({ setOpen, rowId }) {
                 <Typography varient="p" sx={{ padding: '10px', fontWeight: 'bold' }}>
                     Create Role
                 </Typography>
-                <Button onClick={() => navigate('roles/roles-list')} type="add" variant="outlined" color="primary">
+                <Button onClick={() => setOpen(false)} type="add" variant="outlined" color="primary">
                     Back
                 </Button>
             </Stack>
             <form>
-                <Grid
-                    sx={{
-                        bgcolor: 'white',
-                        dimensions: '100% 100%',
-                        animation: animations.fadeInUp,
-                        padding: '20px'
-                    }}
-                >
-                    {' '}
-                    <p className="label-color">
-                        Name:<span className="important">*</span>
-                    </p>
-                    <TextField fullWidth label="Enter Name" varient="outlined" size="small" name="name" onChange={handleChange} />
-                </Grid>
-                <Grid
-                    sx={{
-                        bgcolor: 'white',
-                        dimensions: '100% 100%',
-                        animation: animations.fadeInUp
-                    }}
-                    container
-                    spacing={0}
-                    padding={2}
-                >
-                    {checkArr.map((obj, index) => {
-                        return (
-                            <Grid key={index} item lg={4} md={4} sm={6} xs={12}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            size="small"
-                                            id={obj?.id}
-                                            checked={checkedValues.includes(obj?.id)}
-                                            onChange={handleProductChange}
-                                        />
-                                    }
-                                    label={obj?.name}
-                                />
-                                {/* <Stack flexDirection="row" justifyContent="start" alignItems="center">
+                <Box sx={{ padding: '20px 0px 0px 0px' }}>
+                    <Grid
+                        sx={{
+                            bgcolor: 'white',
+                            dimensions: '100% 100%',
+                            animation: animations.fadeInUp,
+                            padding: '20px'
+                        }}
+                    >
+                        {' '}
+                        <p className="label-color">
+                            Name:<span className="important">*</span>
+                        </p>
+                        <TextField fullWidth label="Enter Name" varient="outlined" size="small" name="name" onChange={handleChange} />
+                    </Grid>
+                    <Grid
+                        sx={{
+                            bgcolor: 'white',
+                            dimensions: '100% 100%',
+                            animation: animations.fadeInUp
+                        }}
+                        container
+                        spacing={0}
+                        padding={2}
+                    >
+                        {checkArr.map((obj, index) => {
+                            return (
+                                <Grid key={index} item lg={4} md={4} sm={6} xs={12}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                size="small"
+                                                id={obj?.id}
+                                                checked={checkedValues.includes(obj?.id)}
+                                                onChange={handleProductChange}
+                                            />
+                                        }
+                                        label={obj?.name}
+                                    />
+                                    {/* <Stack flexDirection="row" justifyContent="start" alignItems="center">
                                     <input
                                         type="checkbox"
                                         value={obj?.id}
@@ -251,18 +252,19 @@ export default function AddRoles({ setOpen, rowId }) {
                                     />
                                     <label>{obj?.name}</label>
                                 </Stack> */}
-                            </Grid>
-                        );
-                    })}
-                    {/* <button className="btn btn-primary" onClick={() => submit()}>
+                                </Grid>
+                            );
+                        })}
+                        {/* <button className="btn btn-primary" onClick={() => submit()}>
                     submit
                 </button> */}
-                </Grid>
+                    </Grid>
+                </Box>
                 <div style={{ padding: '1% 2% 2% 1%', backgroundColor: 'white' }} className="align-right">
                     <Button type="submit" onClick={submit} className="btn1" variant="contained" color="primary">
                         Save
                     </Button>
-                    <Button onClick={() => navigate('roles/roles-list')} variant="outlined" color="primary">
+                    <Button onClick={() => setOpen(false)} variant="outlined" color="primary">
                         Cancel
                     </Button>
                 </div>

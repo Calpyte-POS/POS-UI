@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
 import './index.css';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { useAxios } from 'components/useAxios';
 
@@ -28,7 +28,7 @@ export default function WarehouseAdd({ setOpen, rowId }) {
         axios
             .post('warehouse/save', formValue)
             .then(async (res) => {
-                toast.success('Request successful');
+                toast.success('Request Successful');
                 console.log(res);
                 setOpen(false);
             })
@@ -66,7 +66,7 @@ export default function WarehouseAdd({ setOpen, rowId }) {
             <div>
                 <Stack flexDirection="row" justifyContent="space-between">
                     <Typography varient="p" sx={{ padding: '10px', fontWeight: 'bold' }}>
-                        Create Warehouse
+                        Create Store
                     </Typography>
                     <Button onClick={() => setOpen(false)} type="add" variant="outlined" color="primary">
                         Back

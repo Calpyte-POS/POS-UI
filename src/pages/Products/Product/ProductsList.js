@@ -1,47 +1,51 @@
-import Button from '@mui/material/Button';
 import React, { useState, useEffect } from 'react';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom/dist';
 import '../../WarehouseModule/index.css';
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchIcon from '@mui/icons-material/Search';
-import Stack from '@mui/material/Stack';
-import { useAxios } from '../../../components/useAxios';
-import AddRoles from './AddRoles';
-import CommonTable from 'components/CommonTable';
 import { Box } from '@mui/material/index';
+import { useAxios } from '../../../components/useAxios';
+import CommonTable from 'components/CommonTable';
 import { animations } from 'react-animation';
-import DeleteRoles from './DeleteRoles';
+import ProductsAdd from './ProductsAdd';
 
-export default function ListRoles({ categoryTrigger }) {
+export default function ProductsList({ categoryTrigger }) {
     const navigate = useNavigate();
+    const [displayValue, setDisplayValue] = useState([]);
+    const columns = ['userId', 'title'];
     const axios = useAxios();
     const [categories, setCategories] = useState([]);
     const [count, setCount] = useState(0);
     const [rowId, setRowId] = useState({});
-    const displayedColumns = ['Name'];
-    const definedColumns = ['name'];
+    const displayedColumns = ['Name', 'Code', 'Brand', 'Price', 'Product Unit', 'In Stock'];
+    const definedColumns = ['name', 'code', 'brand', 'productPrice', 'productUnit', 'stockAlert'];
     const [isComplete, setIsComplete] = useState(false);
-    const searchColumns = [{ name: 'name', canShow: true }];
-    const [isDelete, setIsDelete] = React.useState(false);
-
+    const searchColumns = [
+        { name: 'Name', canShow: true },
+        { name: 'Code', canShow: true },
+        { name: 'Brand', canShow: true },
+        { name: 'ProductPrice', canShow: true },
+        { name: 'ProductUnit', canShow: true },
+        { name: 'StockAlert', canShow: true }
+    ];
     const [open, setOpen] = useState(false);
+    const [isDelete, setIsDelete] = React.useState(false);
     var postPerPage = 10;
     var pageNumber = 1;
     var filter = [];
+
     const randomNumber = () => {
         return Math.floor(Math.random() * 100 + 1);
     };
 
-    const getRoleData = async () => {
+    const getProoductData = async () => {
         let data = {
             draw: randomNumber(),
             filter: filter,
             pageNo: pageNumber,
             pageSize: postPerPage
         };
-
         await axios
-            .post('role', data)
+            .post('sub-category/getSubCategories', data)
             .then((res) => {
                 console.log(data);
                 setCount(res?.data?.recordsTotal);
@@ -57,13 +61,12 @@ export default function ListRoles({ categoryTrigger }) {
                 setOpen(true);
                 break;
             case 'edit':
-                alert(rowId);
                 setRowId(action.value);
                 setOpen(true);
                 break;
             case 'delete':
                 setRowId(action.value);
-                // alert('delete');
+                // alert('Are you sure to delete');
                 setIsDelete(true);
                 break;
             default:
@@ -76,12 +79,12 @@ export default function ListRoles({ categoryTrigger }) {
     function paginate(event) {
         pageNumber = event?.pageNumber;
         postPerPage = event?.postPerPage;
-        getRoleData();
+        getProoductData();
     }
 
     const search = (event) => {
         filter = event;
-        getRoleData();
+        getProoductData();
     };
 
     useEffect(() => {
@@ -89,7 +92,7 @@ export default function ListRoles({ categoryTrigger }) {
             categoryTrigger.subscribe(() => rowAction());
         }
         setOpen(false);
-        getRoleData();
+        getProoductData();
     }, []);
 
     return (
@@ -100,9 +103,8 @@ export default function ListRoles({ categoryTrigger }) {
                         false: (
                             <div>
                                 <div className="align-right">
-                                    {/* <input type="text" id="search" placeholder="Search" /> */}
                                     <Button onClick={() => rowAction({ name: 'add', value: null })} variant="contained" color="primary">
-                                        Create Role
+                                        Create Product
                                     </Button>
                                 </div>
                                 <br />
@@ -122,13 +124,13 @@ export default function ListRoles({ categoryTrigger }) {
                         ),
                         true: (
                             <div>
-                                <AddRoles rowId={rowId} setOpen={setOpen} />
+                                <ProductsAdd rowId={rowId} setOpen={setOpen} />
                             </div>
                         )
                     }[open]
                 }
             </Box>
-            {isDelete && <DeleteRoles open={isDelete} setOpen={setIsDelete} id={rowId} />}
+            {isDelete && <WarehouseDelete open={isDelete} setOpen={setIsDelete} id={rowId} />}
         </>
     );
 }

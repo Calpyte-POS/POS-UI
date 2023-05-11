@@ -9,6 +9,7 @@ import { Box } from '../../../node_modules/@mui/material/index';
 import UserAdd from './UserAdd';
 import { animations } from 'react-animation';
 import { useAxios } from 'components/useAxios';
+import UserDelete from './UserDelete';
 
 export default function UserList({ categoryTrigger }) {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function UserList({ categoryTrigger }) {
     // const [search, setSearch] = useState('');
     const columns = ['userId', 'title'];
     const axios = useAxios();
+    const [isDelete, setIsDelete] = React.useState(false);
 
     const [categories, setCategories] = useState([]);
     const [count, setCount] = useState(0);
@@ -69,7 +71,8 @@ export default function UserList({ categoryTrigger }) {
                 setOpen(true);
                 break;
             case 'delete':
-                alert('Are you sure to delete');
+                setRowId(action.value);
+                setIsDelete(true);
                 break;
             default:
                 setRowId(null);
@@ -133,6 +136,7 @@ export default function UserList({ categoryTrigger }) {
                     }[open]
                 }
             </Box>
+            {isDelete && <UserDelete open={isDelete} setOpen={setIsDelete} id={rowId} />}
         </>
     );
 }

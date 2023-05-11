@@ -39,6 +39,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open'
 })(({ theme, open }) => ({
+    height: '8vh',
+    zIndex: 3,
     transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -163,7 +165,7 @@ export default function MenuProvider({ handleDrawer }) {
 
     const handleDrawerToggle = () => {
         setOpen(!open);
-        dispatch(setData({ name: 'kumar', email: 'diensh', token: 'asddasf', isLoggedIn: true }));
+        dispatch(setData({ name: 'Kishore', email: 'KKK', token: 'asddasf', isLoggedIn: true }));
         handleDrawer();
     };
 
@@ -177,9 +179,9 @@ export default function MenuProvider({ handleDrawer }) {
                 <AppBar
                     position="fixed"
                     open={open}
-                    style={{ background: 'white', boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px', color: 'black' }}
+                    style={{ background: 'white', boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px', color: 'black', zIndex: 3 }}
                 >
-                    <Toolbar style={{ marginLeft: open ? drawerWidth + 'px' : '0', alignItems: 'center' }}>
+                    <Toolbar style={{ alignItems: 'center' }}>
                         <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} edge="start" sx={{ mr: 2 }}>
                             <ListIcon />
                         </IconButton>
@@ -200,13 +202,16 @@ export default function MenuProvider({ handleDrawer }) {
             <Drawer
                 PaperProps={{
                     sx: {
-                        boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+                        boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
+                        height: '92vh',
+                        top: '8vh',
+                        zIndex: 2
                     },
-                    style: { borderRadius: '0px 30px 0px 0px' }
+                    style: { borderRadius: '20px' }
                 }}
                 sx={{
                     width: drawerWidth,
-                    flexShrink: 0,
+                    // flexShrink: 0,
                     '& .MuiDrawer-paper': {
                         width: drawerWidth,
                         boxSizing: 'border-box'

@@ -13,20 +13,21 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
 import { AxiosProvider } from './components/useAxios';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from './Keycloak';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    // <React.StrictMode>
-
-    <ReduxProvider store={store}>
-        <AxiosProvider>
-            <BrowserRouter>
-                <App />
-                <ToastContainer position="top-right" theme="light" />
-            </BrowserRouter>
-        </AxiosProvider>
-    </ReduxProvider>
-    /* </React.StrictMode> */
+    <ReactKeycloakProvider authClient={keycloak}>
+        <ReduxProvider store={store}>
+            <AxiosProvider>
+                <BrowserRouter>
+                    <App />
+                    <ToastContainer position="top-right" theme="light" />
+                </BrowserRouter>
+            </AxiosProvider>
+        </ReduxProvider>
+    </ReactKeycloakProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
